@@ -16,6 +16,41 @@ const emojiDetails = [
   const guessInput = document.getElementById("guess-input");
   const resultElement = document.getElementById("result");
   const scoreElement = document.getElementById("score");
+  const timerElement = document.getElementById("timer");
+  const restartElement = document.getElementById("restart-button");
+  let totalGameTime = 20;
+let timer;
+
+  function StartTimer(){
+    timer = 
+    setInterval(() => {
+      totalGameTime--;
+      timerElement.innerHTML = totalGameTime;
+      if(totalGameTime <= 0){
+        restartElement.setAttribute("style","display:inline");
+        timerElement.setAttribute("style","display:none");
+        guessInput.disabled = true;
+        clearInterval(timer);
+      }
+
+    }, 1000);
+  }
+
+  //StartTimer(totalGameTime);
+  StartTimer();
+
+
+  restartElement.addEventListener("click",()=>{
+    currentEmojiIndex = -1; // As next emoji function adds 1 to the index 
+    score=0;
+    totalGameTime =20;
+    StartTimer();
+    guessInput.disabled = false;
+    timerElement.setAttribute("style","display:inline");
+    restartElement.setAttribute("style","display:none");
+    displayEmoji();
+
+  });
 
   function displayEmoji() {
     const descriptionElement = document.getElementById("description");
@@ -32,16 +67,17 @@ const emojiDetails = [
     } else {
       resultElement.textContent = "Wrong!";
     }
-    console.log(score);
+    //console.log(score);
     scoreElement.textContent = `Score: ${score}`;
     guessInput.value = "";
     guessInput.focus();
     nextEmoji();
   }
 
+  
   function nextEmoji() {
     currentEmojiIndex++;
-
+    setTimeout(()=>{resultElement.innerHTML = "";},1000);
     if (currentEmojiIndex === emojiDetails.length) {
       currentEmojiIndex = 0;
       score=0;
